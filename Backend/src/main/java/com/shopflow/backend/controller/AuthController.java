@@ -53,9 +53,9 @@ public class AuthController {
         newUser.setName(request.name());
         newUser.setEmail(request.email());
         newUser.setPassword(passwordEncoder.encode(request.password()));
-        newUser.setRole(request.role());
+        newUser.setRole(Role.USER);
         newUser.setTelephone(request.telephone());
-        newUser.setActive(request.active());
+        newUser.setActive(true);
         userRepository.save(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterUserResponse(newUser.getName(), newUser.getEmail()));
     }

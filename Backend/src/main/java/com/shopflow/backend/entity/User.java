@@ -1,5 +1,6 @@
 package com.shopflow.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shopflow.backend.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +46,7 @@ public class User implements UserDetails {
     private String telephone;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -53,6 +55,10 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Category> categories = new ArrayList<>();
 
     /*
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -102,4 +108,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isAdmin() { return this.role == Role.ADMIN; }
 }

@@ -124,5 +124,8 @@
     </orderEntry>
     <orderEntry type="library" name="Gradle: com.auth0:java-jwt:4.5.1" level="project" />
     <orderEntry type="library" name="Gradle: jakarta.validation:jakarta.validation-api:3.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.xmlunit:xmlunit-core:2.10.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.mapstruct:mapstruct:1.6.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.cloudinary:cloudinary-core:1.38.0" level="project" />
   </component>
 </module>
