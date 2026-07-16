@@ -42,6 +42,18 @@ public class GlobalExceptionHandler {
                 ApiResponse.error(message, HttpStatus.BAD_REQUEST));
     }
 
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBusinessRuleException(BusinessRuleException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ApiResponse.error(ex.getMessage(), HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(SecurityAuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleSecurityAuthenticationException(SecurityAuthenticationException ex){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                ApiResponse.error(ex.getMessage(), HttpStatus.UNAUTHORIZED));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
