@@ -60,7 +60,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Category> categories = new ArrayList<>();
 
-    /*
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Cart cart;
 
@@ -71,8 +71,7 @@ public class User implements UserDetails {
     private List<Assessment> assessments = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Address> addresses = new ArrayList<>();
-    */
+    private List<Addresses> addresses = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -108,6 +107,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    public boolean isAdmin() { return this.role == Role.ADMIN; }
 }

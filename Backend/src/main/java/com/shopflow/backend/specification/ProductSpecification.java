@@ -1,6 +1,7 @@
 package com.shopflow.backend.specification;
 
 import com.shopflow.backend.entity.Product;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 public class ProductSpecification {
 
-    public static Specification<Product> comFiltros(
+    public static Specification<Product> withFilters(
             String name,
             UUID categoryId,
             BigDecimal precoMin,
@@ -21,6 +22,14 @@ public class ProductSpecification {
 
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
+
+            if(query != null){
+                query.distinct(true);
+
+                if(query.getResultType() != Long.class){
+                    root.fetch("category", JoinType.LEFT);
+                }
+            }
 
             if (name != null && !name.isBlank()) {
                 predicates.add(cb.like(

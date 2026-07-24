@@ -73,7 +73,7 @@ public class ProductService {
         Boolean active = isAdmin() ? null : true;
 
         Specification<Product> spec = ProductSpecification
-                .comFiltros(searchName, categoryId, precoMin, precoMax, active);
+                .withFilters(searchName, categoryId, precoMin, precoMax, active);
 
         return productRepository.findAll(spec, pageable)
                 .map(productMapper::toResponse);

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,4 +34,23 @@ public class Cart {
     @UpdateTimestamp
     @Column(name ="updated_at")
     private LocalDateTime updatedAt;
+
+    public BigDecimal getTotalPrice(){
+        if(this.items == null){
+            return BigDecimal.ZERO;
+        }
+        return this.items.stream()
+                .filter(item -> item.getProduct() != null && item.getProduct().getPrice() != null)
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Integer getTotalItems(){
+        if(this.items == null){
+            return 0;
+        }
+        return this.items.stream()
+                .mapToInt(CartItem::getQuantity)
+                .sum();
+    }
 }

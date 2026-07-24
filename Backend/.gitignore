@@ -9,7 +9,7 @@ build/
 .env
 .env.*
 !.env.example
-Credenciais.env
+../Credenciais.env
 
 ### STS ###
 .apt_generated
@@ -41,3 +41,14 @@ RequestCategory.http
 RequestProduct.http
 RequestRegisterLogin.http
 RequestCarts.http
+RequestAddresses.http
+RequestOrders.http
+RequestCouponsAndAssessments.http
+
+### DB migrations ###
+V1__create_tables.sql
+V3__alter_table_category.sql
+V4__create_order_orderItem.sql
+V5__coupons.sql
+V6__create_assessments.sql
+V7__alter_table_coupons.sql

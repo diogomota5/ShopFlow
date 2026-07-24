@@ -60,12 +60,9 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    /*
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItem = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Assessment> assessments = new ArrayList<>();
-    */
-
 }
