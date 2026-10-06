@@ -1,0 +1,33 @@
+.skip-link { position: fixed; top: -4rem; left: 1rem; z-index: 10001; padding: .7rem 1rem; background: var(--surface-card); color: var(--text-primary); border: 2px solid var(--primary); border-radius: var(--radius-sm); font-weight: 700; text-decoration: none; }
+.skip-link:focus { top: 1rem; }
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-layout.auth-mode,
+.app-layout.admin-mode {
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.main-content--auth {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.main-content--admin {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}

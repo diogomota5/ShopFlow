@@ -12,17 +12,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import com.shopflow.backend.repository.UserRepository;
+import com.shopflow.backend.entity.User;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenConfig tokenConfig;
+    private final UserRepository userRepository;
 
-    public SecurityFilter(TokenConfig tokenConfig) {
+    public SecurityFilter(TokenConfig tokenConfig, UserRepository userRepository) {
         this.tokenConfig = tokenConfig;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -33,12 +38,17 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (Strings.isNotEmpty(authorizedHeader) && authorizedHeader.startsWith("Bearer ")) {
             String token = authorizedHeader.substring("Bearer ".length());
             Optional<JWTUserData> optUser = tokenConfig.validateToken(token);
-            if(optUser.isPresent()) {
+            if (optUser.isPresent()) {
                 JWTUserData userData = optUser.get();
-                String roleFormat = "ROLE_" + userData.Role().toUpperCase();
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleFormat));
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userData, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                UUID userId = userData.userId();
+                Optional<User> userOpt = userRepository.findById(userId);
+                if (userOpt.isPresent()) {
+                    User user = userOpt.get();
+                    String roleFormat = "ROLE_" + user.getRole().name();
+                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleFormat));
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userData, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
             filterChain.doFilter(request, response);
         } else {

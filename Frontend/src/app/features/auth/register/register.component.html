@@ -1,0 +1,181 @@
+<div class="auth-page">
+  <div class="auth-shell auth-shell--register animate-fade-in">
+    <section class="auth-card">
+      @if (success()) {
+        <div class="success-state">
+          <div class="success-icon" aria-hidden="true">✓</div>
+          <h1 class="auth-title">Conta criada!</h1>
+          <p class="auth-subtitle">Enviamos um link de confirmação para o seu e-mail. Confirme o cadastro antes de entrar.</p>
+        </div>
+      } @else {
+        <div class="auth-intro">
+          <h1 class="auth-title">Cadastro</h1>
+          <p class="auth-subtitle">Crie sua conta e comece a comprar</p>
+        </div>
+
+        @if (error()) {
+          <div class="alert alert-error" role="alert" aria-live="assertive">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{{ error() }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="on">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Nome completo</label>
+              <input
+                id="reg-name"
+                class="form-control auth-input"
+                [class.is-error]="name.invalid && name.touched"
+                type="text"
+                formControlName="name"
+                placeholder="Seu nome"
+                autocomplete="name"
+              />
+              @if (name.invalid && name.touched) {
+                <span class="form-error">Nome: 3–100 caracteres.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">
+                Telefone <span class="optional">(opc.)</span>
+              </label>
+              <input
+                id="reg-phone"
+                class="form-control auth-input"
+                type="tel"
+                formControlName="telephone"
+                placeholder="(00) 00000-0000"
+                autocomplete="tel"
+                inputmode="tel"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">E-mail</label>
+            <input
+              id="reg-email"
+              class="form-control auth-input"
+              [class.is-error]="email.invalid && email.touched"
+              type="email"
+              formControlName="email"
+              placeholder="seuemail@gmail.com"
+              autocomplete="email"
+              inputmode="email"
+            />
+            @if (email.invalid && email.touched) {
+              <span class="form-error">
+                {{ email.errors?.['required'] ? 'E-mail é obrigatório.' : 'Digite um e-mail válido.' }}
+              </span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Senha</label>
+            <div class="input-wrapper">
+              <input
+                id="reg-password"
+                class="form-control auth-input"
+                [class.is-error]="password.invalid && password.touched"
+                [type]="showPassword() ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Mín. 8 chars, maiúscula e número"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="input-icon-right"
+                (click)="showPassword.update((v) => !v)"
+                [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+              >
+                @if (showPassword()) {
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                } @else {
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (password.value) {
+              <div class="strength-bar">
+                @for (i of [1, 2, 3, 4, 5]; track i) {
+                  <div
+                    class="strength-segment"
+                    [class.filled]="passwordStrengthLevel >= i"
+                    [attr.data-level]="strengthLevelKey"
+                  ></div>
+                }
+                <span class="strength-label" [attr.data-level]="strengthLevelKey">{{
+                  strengthLabel
+                }}</span>
+              </div>
+            }
+            @if (password.invalid && password.touched) {
+              <span class="form-error">Mín. 8 chars, maiúscula e número.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm">Confirmar senha</label>
+            <input
+              id="reg-confirm"
+              class="form-control auth-input"
+              [class.is-error]="
+                (confirmPassword.invalid || form.errors?.['mustMatch']) && confirmPassword.touched
+              "
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Repita a senha"
+              autocomplete="new-password"
+            />
+            @if (form.errors?.['mustMatch'] && confirmPassword.touched) {
+              <span class="form-error">As senhas não coincidem.</span>
+            }
+          </div>
+
+          <button
+            id="register-submit"
+            type="submit"
+            class="btn btn-accent auth-submit"
+            [disabled]="form.invalid || loading()"
+          >
+            @if (loading()) {
+              <span class="btn-spinner"></span> Criando conta...
+            } @else {
+              Criar conta
+            }
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Já tem uma conta?
+          <a routerLink="/login">Entrar</a>
+        </p>
+        <a class="auth-home-link" routerLink="/">Quer voltar para a home?</a>
+      }
+    </section>
+
+    <aside class="auth-visual" aria-hidden="true">
+      <img
+        class="brand-img"
+        src="/shopflow-brand.png"
+        alt="ShopFlow"
+        width="1024"
+        height="1024"
+      />
+    </aside>
+  </div>
+</div>

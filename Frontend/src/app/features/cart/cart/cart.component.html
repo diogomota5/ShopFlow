@@ -1,0 +1,156 @@
+<!-- Cart Page -->
+<div class="container page-main">
+  <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem">Carrinho</h1>
+
+  @if (loading()) {
+    <div class="cart-skeleton">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="skeleton" style="height: 100px; border-radius: 12px"></div>
+      }
+    </div>
+  } @else if (!cart() || cart()!.items.length === 0) {
+    <div class="empty-cart">
+      <span class="empty-icon">🛒</span>
+      <h2>Seu carrinho está vazio</h2>
+      <p class="text-muted">Adicione produtos para continuar sua compra.</p>
+      <a routerLink="/products" class="btn btn-primary btn-lg">Ver produtos</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <!-- Items -->
+      <div class="cart-items">
+        <div class="cart-header">
+          <span class="text-muted text-sm">{{ cart()!.totalItems }} item(ns)</span>
+          <button class="btn btn-ghost btn-sm" (click)="clearCart()">Esvaziar carrinho</button>
+        </div>
+
+        @for (item of cart()!.items; track item.id) {
+          <div class="cart-item card animate-fade-in" [class.updating]="updating() === item.id">
+            <div class="item-img-wrap">
+              @if (item.productImageUrl) {
+                <img [src]="item.productImageUrl" [alt]="item.productName" loading="lazy" />
+              } @else {
+                <div class="img-ph">📷</div>
+              }
+            </div>
+            <div class="item-details">
+              <a [routerLink]="['/products', item.productId]" class="item-name">{{
+                item.productName | titlecase
+              }}</a>
+              <span class="text-muted text-sm">{{ formatPrice(item.price) }} cada</span>
+            </div>
+            <div class="item-actions">
+              <div class="qty-stepper">
+                <button
+                  class="qty-btn"
+                  (click)="updateQty(item, -1)"
+                  [disabled]="updating() === item.id"
+                  aria-label="Diminuir quantidade"
+                >
+                  −
+                </button>
+                <span class="qty-value">{{ item.quantity }}</span>
+                <button
+                  class="qty-btn"
+                  (click)="updateQty(item, 1)"
+                  [disabled]="updating() === item.id"
+                  aria-label="Aumentar quantidade"
+                >
+                  +
+                </button>
+              </div>
+              <span class="item-subtotal">{{ formatPrice(item.subtotal) }}</span>
+              <button
+                class="btn btn-ghost btn-icon btn-sm"
+                (click)="removeItem(item)"
+                [disabled]="updating() === item.id"
+                aria-label="Remover item"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3,6 5,6 21,6" />
+                  <path d="M19 6l-1 14H6L5 6" />
+                  <path d="M10 11v6M14 11v6" />
+                  <path d="M9 6V4h6v2" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Summary -->
+      <aside class="cart-summary card">
+        <h3>Resumo do pedido</h3>
+
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>{{ formatPrice(cart()!.totalPrice) }}</span>
+          </div>
+          @if (coupon()) {
+            <div class="summary-row discount-row">
+              <span>Cupom "{{ coupon()!.code }}"</span>
+              <span class="text-sale">-{{ formatPrice(discount) }}</span>
+            </div>
+          }
+          <hr class="divider" />
+          <div class="summary-row total-row">
+            <span class="font-bold">Total</span>
+            <span class="font-bold text-xl">{{ formatPrice(finalPrice) }}</span>
+          </div>
+        </div>
+
+        <!-- Coupon -->
+        <div class="coupon-section">
+          @if (!coupon()) {
+            <label class="form-label" for="coupon-input">Código do cupom</label>
+            <div class="coupon-input-row">
+              <input
+                id="coupon-input"
+                class="form-control"
+                type="text"
+                placeholder="Digite o código…"
+                [(ngModel)]="couponCode"
+                (keyup.enter)="applyCoupon()"
+              />
+              <button
+                class="btn btn-outline"
+                (click)="applyCoupon()"
+                [disabled]="!couponCode || validatingCoupon()"
+              >
+                @if (validatingCoupon()) {
+                  …
+                } @else {
+                  Aplicar
+                }
+              </button>
+            </div>
+            @if (couponError()) {
+              <p class="form-error" style="margin-top: 0.375rem">{{ couponError() }}</p>
+            }
+          } @else {
+            <div class="coupon-applied">
+              <span class="badge badge-success">✓ Cupom aplicado: {{ coupon()!.code }}</span>
+              <button class="btn btn-ghost btn-sm" (click)="removeCoupon()">Remover</button>
+            </div>
+          }
+        </div>
+
+        <!-- Checkout CTA -->
+        <button class="btn btn-primary btn-full btn-lg" style="margin-top: 1rem" (click)="goToCheckout()">
+          Finalizar Compra →
+        </button>
+        <a routerLink="/products" class="btn btn-ghost btn-full btn-sm" style="margin-top: 0.5rem">
+          ← Continuar comprando
+        </a>
+      </aside>
+    </div>
+  }
+</div>

@@ -1,0 +1,82 @@
+<div class="container page-main">
+  <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem">Meus Pedidos</h1>
+
+  @if (successOrderId()) {
+    <div class="success-banner animate-fade-in">
+      <span>✓</span>
+      <div>
+        <strong>Pedido realizado com sucesso!</strong>
+        <p class="text-sm">Seu pedido foi registrado e está sendo processado.</p>
+      </div>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="alert alert-error" role="alert">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    @for (i of [1, 2, 3]; track i) {
+      <div class="skeleton" style="height: 120px; border-radius: 12px; margin-bottom: 1rem"></div>
+    }
+  } @else if (orders().length === 0) {
+    <div class="empty-state card">
+      <span style="font-size: 3rem">📦</span>
+      <h2>Nenhum pedido ainda</h2>
+      <p class="text-muted">Explore nossos produtos e faça sua primeira compra!</p>
+      <a routerLink="/products" class="btn btn-primary">Ver Produtos</a>
+    </div>
+  } @else {
+    @for (order of orders(); track order.id) {
+      <article class="order-card card animate-fade-in">
+        <div class="order-header">
+          <div>
+            <span class="text-sm text-muted">Pedido #{{ order.id.slice(0, 8) }}</span>
+            <span class="order-status" [class]="statusClass(order.status)">{{ statusLabel(order.status) }}</span>
+          </div>
+          <span class="text-sm text-muted">{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+
+        <div class="order-items">
+          @for (item of order.items; track item.id) {
+            <div class="order-item">
+              <span>{{ item.quantity }}x {{ item.productName }}</span>
+              <span>{{ formatPrice(item.subtotal) }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="order-footer">
+          <div class="text-sm text-muted">
+            {{ order.shippingStreet }}, {{ order.shippingNumber }} – {{ order.shippingCity }}/{{ order.shippingState }}
+            @if (order.trackingCode) {
+              <br />Rastreio: <strong>{{ order.trackingCode }}</strong>
+            }
+          </div>
+          <span class="font-bold text-lg">{{ formatPrice(order.total) }}</span>
+        </div>
+
+        @if (order.statusHistory.length) {
+          <div class="order-history">
+            <strong>Histórico do pedido</strong>
+            @for (event of order.statusHistory; track event.id) {
+              <div><span>{{ statusLabel(event.status) }}</span><small>{{ event.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small></div>
+            }
+          </div>
+        }
+
+        @if (order.status === 'PENDING' || order.status === 'PAID') {
+          <button class="btn btn-outline btn-sm order-cancel" (click)="cancel(order)">Cancelar pedido</button>
+        }
+      </article>
+    }
+
+    @if (pages.length > 1) {
+      <div class="pagination" style="margin-top: 1.5rem">
+        @for (p of pages; track p) {
+          <button class="page-btn" [class.active]="p === currentPage()" (click)="goToPage(p)">{{ p + 1 }}</button>
+        }
+      </div>
+    }
+  }
+</div>

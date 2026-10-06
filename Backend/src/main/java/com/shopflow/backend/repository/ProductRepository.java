@@ -5,6 +5,8 @@ import com.shopflow.backend.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,14 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     long countByActiveTrue();
 
     long countByCategoryIdAndActiveTrue(UUID categoryId);
+
+    @Modifying
+    @Query("update Product p set p.stock = p.stock - :quantity where p.id = :productId and p.active = true and p.stock >= :quantity")
+    int reserveStock(@Param("productId") UUID productId, @Param("quantity") int quantity);
+
+    @Modifying
+    @Query("update Product p set p.stock = p.stock + :quantity where p.id = :productId")
+    int releaseStock(@Param("productId") UUID productId, @Param("quantity") int quantity);
 /*
     @Query("""
             SELECT p FROM Product p

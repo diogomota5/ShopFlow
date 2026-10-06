@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,22 @@ public class CouponService {
     @Transactional(readOnly = true)
     public List<CouponResponse> getAllCoupons(){
         return couponMapper.toResponseList(couponRepository.findAll());
+    }
+
+    @Transactional
+    public CouponResponse updateCoupon(UUID id, CouponRequest request) {
+        Coupon coupon = couponRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cupom não encontrado: " + id));
+        couponRepository.findByCodeIgnoreCase(request.code()).filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> { throw new BusinessRuleException("Já existe um cupom com esse código"); });
+        coupon.setCode(request.code()); coupon.setDiscountValue(request.discountValue()); coupon.setDiscountType(request.discountType());
+        coupon.setMinPurchaseValue(request.minPurchaseValue()); coupon.setExpirationDate(request.expirationDate()); coupon.setMaxUses(request.maxUses());
+        return couponMapper.toResponse(couponRepository.save(coupon));
+    }
+
+    @Transactional
+    public void setActive(UUID id, boolean active) {
+        Coupon coupon = couponRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cupom não encontrado: " + id));
+        coupon.setActive(active); couponRepository.save(coupon);
     }
 
     @Transactional(readOnly = true)

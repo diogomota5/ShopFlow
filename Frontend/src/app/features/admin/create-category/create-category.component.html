@@ -1,0 +1,127 @@
+<div class="admin-panel">
+  <div class="admin-panel__header">
+    <h2 class="admin-panel__title">
+      {{ editingCategoryId ? 'Editar Categoria' : 'Criar Nova Categoria' }}
+    </h2>
+    <p class="admin-panel__subtitle">Organize seus produtos em categorias.</p>
+  </div>
+  <div class="admin-panel__body">
+    @if (message) {
+      <div class="admin-alert admin-alert--success">{{ message }}</div>
+    }
+
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="admin-form">
+      <div class="admin-form-group">
+        <label for="cat-name">Nome da Categoria</label>
+        <input
+          id="cat-name"
+          type="text"
+          formControlName="name"
+          class="form-control"
+          placeholder="Ex: Eletrônicos"
+        />
+      </div>
+
+      <div class="admin-form-group">
+        <label for="cat-desc">Descrição</label>
+        <textarea
+          id="cat-desc"
+          formControlName="description"
+          class="form-control"
+          placeholder="Descrição da categoria..."
+        ></textarea>
+      </div>
+
+      <div class="admin-form-group">
+        <label for="cat-img">Imagem da Categoria</label>
+        <input
+          id="cat-img"
+          type="file"
+          (change)="onFileSelected($event)"
+          class="admin-file-input"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="admin-form-actions">
+        @if (editingCategoryId) {
+          <button type="button" class="btn btn-outline" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid">
+            Salvar Alterações
+          </button>
+        } @else {
+          <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid">
+            Criar Categoria
+          </button>
+        }
+      </div>
+    </form>
+  </div>
+</div>
+
+<section class="admin-panel admin-list-panel">
+  <div class="admin-panel__header">
+    <h2 class="admin-panel__title">Categorias cadastradas</h2>
+    <div class="admin-search-row">
+      <input
+        class="form-control"
+        [(ngModel)]="categorySearch"
+        (keyup.enter)="loadCategories()"
+        placeholder="Buscar categoria"
+        aria-label="Buscar categorias"
+      />
+      <button class="btn btn-outline" type="button" (click)="loadCategories()">Buscar</button>
+    </div>
+  </div>
+  <div class="admin-panel__body admin-table-wrap">
+    @if (categories.length) {
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (category of categories; track category.id) {
+            <tr>
+              <td>{{ category.name | titlecase }}</td>
+              <td>{{ category.description }}</td>
+              <td>
+                <span
+                  class="admin-badge"
+                  [class.admin-badge--active]="category.active"
+                  [class.admin-badge--inactive]="!category.active"
+                >
+                  {{ category.active ? 'Ativa' : 'Inativa' }}
+                </span>
+              </td>
+              <td class="admin-actions">
+                <button
+                  class="btn btn-sm btn-edit"
+                  (click)="startEditCategory(category)"
+                  title="Editar"
+                >
+                  ✏️ Editar
+                </button>
+                <button
+                  class="btn btn-sm"
+                  [class.btn-danger]="category.active"
+                  [class.btn-success]="!category.active"
+                  (click)="toggleCategory(category)"
+                  [title]="category.active ? 'Desativar' : 'Ativar'"
+                >
+                  {{ category.active ? '🚫 Desativar' : '✅ Ativar' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="admin-empty-state">Nenhuma categoria encontrada.</p>
+    }
+  </div>
+</section>

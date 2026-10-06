@@ -1,0 +1,224 @@
+<div [class.profile-standalone]="!isAdminContext">
+  <!-- Perfil do Usuário -->
+  <div class="admin-panel">
+    <div class="admin-panel__header">
+      <h2 class="admin-panel__title">Editar Perfil</h2>
+      <p class="admin-panel__subtitle">Atualize os dados do usuário.</p>
+    </div>
+    <div class="admin-panel__body">
+      @if (isLoading) {
+        <div class="profile-loading">
+          <div class="spinner"></div>
+          <span>Carregando dados...</span>
+        </div>
+      }
+
+      @if (!isLoading && errorMessage) {
+        <div class="admin-alert admin-alert--error">{{ errorMessage }}</div>
+      }
+
+      @if (!isLoading && successMessage) {
+        <div class="admin-alert admin-alert--success">{{ successMessage }}</div>
+      }
+
+      @if (!isLoading && currentUser) {
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="admin-form">
+          <div class="admin-form-group">
+            <label for="profile-name">Nome</label>
+            <input id="profile-name" type="text" formControlName="name" class="form-control" />
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label for="profile-email">E-mail</label>
+              <input id="profile-email" type="email" formControlName="email" class="form-control" />
+            </div>
+            <div class="admin-form-group">
+              <label for="profile-phone">Telefone</label>
+              <input
+                id="profile-phone"
+                type="text"
+                formControlName="telephone"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          @if (isEditingUserFromAdminPanel) {
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label for="profile-role">Perfil</label>
+                <select id="profile-role" formControlName="role" class="form-control">
+                  <option value="USER">Usuário</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+              <div class="admin-form-group">
+                <label>Status da conta</label>
+                <div class="admin-checkbox-row">
+                  <input id="profile-active" type="checkbox" formControlName="active" />
+                  <label for="profile-active">Conta ativa</label>
+                </div>
+              </div>
+            </div>
+          }
+
+          <div class="admin-form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">
+              Salvar Alterações
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+
+  <!-- Endereços -->
+  @if (!isLoading && currentUser) {
+    <div class="admin-panel" style="margin-top: 1.5rem">
+      <div class="admin-panel__header flex justify-between items-center">
+        <div>
+          <h2 class="admin-panel__title">Endereços</h2>
+          <p class="admin-panel__subtitle">Gerencie os endereços de entrega cadastrados.</p>
+        </div>
+        <button class="btn btn-sm btn-primary" (click)="openAddressForm()">+ Adicionar</button>
+      </div>
+      <div class="admin-panel__body">
+        @if (isLoadingAddresses) {
+          <div class="profile-loading">
+            <div class="spinner"></div>
+            <span>Buscando endereços...</span>
+          </div>
+        }
+
+        @if (addressErrorMessage) {
+          <div class="admin-alert admin-alert--error mb-4">{{ addressErrorMessage }}</div>
+        }
+        @if (addressSuccessMessage) {
+          <div class="admin-alert admin-alert--success mb-4">{{ addressSuccessMessage }}</div>
+        }
+
+        @if (!isLoadingAddresses && !showAddressForm) {
+          <div class="address-grid">
+            @for (addr of addresses; track addr.id) {
+              <div class="card address-card" [class.is-primary]="addr.primaryAddress">
+                <div class="address-content">
+                  <div class="address-header flex justify-between">
+                    <strong class="text-base">{{ addr.nickname || 'Endereço' }}</strong>
+                    @if (addr.primaryAddress) {
+                      <span class="badge badge-success">Principal</span>
+                    }
+                  </div>
+                  <p class="text-sm text-secondary mt-2">
+                    {{ addr.street }}, {{ addr.streetNumber }}
+                    @if (addr.complement) {
+                      <br />{{ addr.complement }}
+                    }
+                  </p>
+                  <p class="text-sm text-secondary">{{ addr.neighborhood }}</p>
+                  <p class="text-sm text-secondary">{{ addr.city }} - {{ addr.state }}</p>
+                  <p class="text-sm text-secondary font-semibold">{{ addr.zipCode }}</p>
+                </div>
+
+                <div class="address-actions">
+                  <button class="btn btn-sm btn-outline" (click)="openAddressForm(addr)">
+                    Editar
+                  </button>
+                  <button class="btn btn-sm btn-ghost" (click)="deleteAddress(addr.id)">
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            } @empty {
+              <p class="text-muted text-center" style="grid-column: 1 / -1; margin-top: 1rem">
+                Nenhum endereço cadastrado.
+              </p>
+            }
+          </div>
+        }
+
+        @if (showAddressForm) {
+          <form
+            [formGroup]="addressForm"
+            (ngSubmit)="saveAddress()"
+            class="admin-form address-form-container"
+          >
+            <h3 class="text-lg mb-2">
+              {{ editingAddressId ? 'Editar Endereço' : 'Novo Endereço' }}
+            </h3>
+
+            <div class="admin-form-group">
+              <label>Apelido (ex: Casa, Trabalho)</label>
+              <input type="text" formControlName="nickname" class="form-control" />
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>CEP *</label>
+                <input
+                  type="text"
+                  formControlName="zipCode"
+                  class="form-control"
+                  placeholder="00000000"
+                />
+              </div>
+              <div class="admin-form-group">
+                <label>Estado (UF) *</label>
+                <input
+                  type="text"
+                  formControlName="state"
+                  class="form-control"
+                  placeholder="SP"
+                  maxlength="2"
+                />
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Cidade *</label>
+                <input type="text" formControlName="city" class="form-control" />
+              </div>
+              <div class="admin-form-group">
+                <label>Bairro *</label>
+                <input type="text" formControlName="neighborhood" class="form-control" />
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group" style="flex: 2">
+                <label>Rua/Avenida *</label>
+                <input type="text" formControlName="street" class="form-control" />
+              </div>
+              <div class="admin-form-group" style="flex: 1">
+                <label>Número *</label>
+                <input type="text" formControlName="streetNumber" class="form-control" />
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label>Complemento</label>
+              <input type="text" formControlName="complement" class="form-control" />
+            </div>
+
+            <div class="admin-form-group mt-2">
+              <div class="admin-checkbox-row" style="padding-top: 0; min-height: auto">
+                <input id="addr-primary" type="checkbox" formControlName="primaryAddress" />
+                <label for="addr-primary">Definir como endereço principal</label>
+              </div>
+            </div>
+
+            <div class="admin-form-actions mt-4">
+              <button type="submit" class="btn btn-primary" [disabled]="addressForm.invalid">
+                Salvar Endereço
+              </button>
+              <button type="button" class="btn btn-ghost" (click)="closeAddressForm()">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  }
+</div>

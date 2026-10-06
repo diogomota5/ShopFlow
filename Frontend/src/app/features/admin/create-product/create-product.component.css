@@ -1,0 +1,137 @@
+@import '../admin-shared/admin.styles.css';
+
+/* Make this admin panel scrollable when content is tall to avoid clipping */
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: none;
+}
+
+.admin-panel__body {
+  overflow: visible;
+  padding-right: 0.5rem;
+}
+
+.admin-form-actions {
+  flex-shrink: 0;
+}
+
+.admin-list-panel {
+  max-height: none;
+  margin-top: 1.5rem;
+}
+.admin-search-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+.admin-table-wrap {
+  overflow: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+.admin-table th,
+.admin-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--border-color, var(--border));
+  text-align: left;
+}
+.admin-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.admin-empty-state {
+  color: var(--text-secondary);
+  margin: 0.5rem 0;
+}
+@media (max-width: 600px) {
+  .admin-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Action column */
+.admin-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Size variant */
+.btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+/* Premium Toggle Buttons */
+.btn-danger {
+  background: var(--danger-alpha);
+  color: var(--danger);
+  border: 1px solid transparent;
+  backdrop-filter: blur(4px);
+}
+.btn-danger:hover {
+  background: var(--danger);
+  color: var(--text-inverse);
+  box-shadow: 0 4px 14px var(--danger-alpha);
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background: var(--success-alpha);
+  color: var(--success);
+  border: 1px solid transparent;
+  backdrop-filter: blur(4px);
+}
+.btn-success:hover {
+  background: var(--success);
+  color: var(--text-inverse);
+  box-shadow: 0 4px 14px var(--success-alpha);
+  transform: translateY(-1px);
+}
+
+.btn-edit {
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  transition: all var(--transition-fast);
+}
+.btn-edit:hover {
+  background: var(--primary-alpha);
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px var(--primary-alpha);
+  transform: translateY(-1px);
+}
+
+/* Status badges */
+.admin-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.admin-badge--active {
+  background: rgba(56, 161, 105, 0.15);
+  color: #276749;
+}
+.admin-badge--inactive {
+  background: rgba(229, 62, 62, 0.12);
+  color: #c53030;
+}
+
+/* Edit mode: align form actions */
+.admin-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}

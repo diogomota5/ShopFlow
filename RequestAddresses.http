@@ -1,0 +1,55 @@
+### Login ###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "diogo@outlook.com",
+  "password": "123456"
+}
+
+###
+
+@baseUrl = http://localhost:8080/adresses
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNTI0NjY4Mi0wZTY3LTQyMGEtOWJmNS0yNzgxNzE2MTQ1NTMiLCJzdWIiOiJkaW9nb0BvdXRsb29rLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzg0NzE5MTkzLCJpYXQiOjE3ODQ2MzI3OTN9.Jl6onnTtogdwzyt7D4uCt3kaL0hkvossN4dWBBbJGC4
+
+### create
+POST {{baseUrl}}/create
+Authorization: {{userToken}}
+Content-Type: application/json
+
+{
+  "nickname": "Casa 2",
+  "zipCode": "33251-434",
+  "street": "Rua Goitacazes",
+  "streetNumber": "911",
+  "complement": "Apto 603",
+  "neighborhood": "Barro Preto",
+  "city": "Belo Horizonte",
+  "state": "MG",
+  "primaryAddress": "false"
+}
+
+### get addresses
+GET {{baseUrl}}/search
+Authorization: {{userToken}}
+
+###update
+PUT {{baseUrl}}/update/7d75767e-0292-4910-941e-0e3f941a552d
+Authorization: {{userToken}}
+Content-Type: application/json
+
+{
+  "nickname": "Teste",
+  "zipCode": "33251-434",
+  "street": "Rua Teste",
+  "streetNumber": "911",
+  "complement": "Apto 603",
+  "neighborhood": "Teste",
+  "city": "Teste",
+  "state": "MG",
+  "primaryAddress": "false"
+}
+
+###delete
+DELETE {{baseUrl}}/delete/7d75767e-0292-4910-941e-0e3f941a552d
+Authorization: {{userToken}}

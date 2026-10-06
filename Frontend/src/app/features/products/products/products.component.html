@@ -1,0 +1,166 @@
+<div class="products-layout">
+  <!-- Sidebar Filters -->
+  <aside class="filters-panel card" aria-label="Filtros de produtos">
+    <div class="filters-header">
+      <h3>Filtros</h3>
+      <button class="btn btn-ghost btn-sm" (click)="clearFilters()">Limpar tudo</button>
+    </div>
+
+    <div class="filter-group">
+      <label class="form-label" for="filter-name">Nome do produto</label>
+      <input
+        id="filter-name"
+        class="form-control"
+        type="search"
+        placeholder="Buscar…"
+        [(ngModel)]="searchName"
+        (keyup.enter)="applyFilters()"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label class="form-label" for="filter-cat">Categoria</label>
+      <select id="filter-cat" class="form-control" [(ngModel)]="selectedCategory">
+        <option value="">Todas as categorias</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.name | titlecase }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="form-label">Faixa de preço (R$)</span>
+      <div class="price-range-inputs">
+        <input
+          class="form-control"
+          type="number"
+          placeholder="Mínimo"
+          [(ngModel)]="minPrice"
+          min="0"
+        />
+        <span class="text-muted">–</span>
+        <input
+          class="form-control"
+          type="number"
+          placeholder="Máximo"
+          [(ngModel)]="maxPrice"
+          min="0"
+        />
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" (click)="applyFilters()">Aplicar filtros</button>
+  </aside>
+
+  <!-- Products Area -->
+  <main class="products-main" aria-label="Catálogo de produtos">
+    <!-- Results count -->
+    @if (!loading() && pageData()) {
+      <p class="results-count text-muted text-sm">
+        Exibindo <strong>{{ products().length }}</strong> de
+        <strong>{{ pageData()!.totalElements }}</strong> produtos
+      </p>
+    }
+
+    @if (loading()) {
+      <div class="products-grid-catalog">
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track i) {
+          <div class="skeleton" style="height: 310px; border-radius: 12px"></div>
+        }
+      </div>
+    } @else if (products().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">🔍</span>
+        <h3>Nenhum produto encontrado</h3>
+        <p class="text-muted">Tente ajustar os filtros ou o termo pesquisado.</p>
+        <button class="btn btn-outline" (click)="clearFilters()">Limpar filtros</button>
+      </div>
+    } @else {
+      <div class="products-grid-catalog">
+        @for (product of products(); track product.id) {
+          <div class="product-card card card-hover animate-fade-in">
+            <a [routerLink]="['/products', product.id]" class="product-img-link">
+              <div class="product-img-wrap">
+                @if (product.imageUrl) {
+                  <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+                } @else {
+                  <div class="img-placeholder">📷</div>
+                }
+                @if (getDiscountPct(product); as disc) {
+                  <span class="badge-sale">-{{ disc }}%</span>
+                }
+                @if (!product.active) {
+                  <div class="unavailable-overlay">Indisponível</div>
+                }
+              </div>
+            </a>
+            <div class="product-body">
+              <span class="prod-cat text-sm text-muted">{{
+                product.categoryName | titlecase
+              }}</span>
+              <a [routerLink]="['/products', product.id]" class="prod-name">{{
+                product.name | titlecase
+              }}</a>
+              <div class="prod-footer">
+                <div>
+                  <span class="price text-lg">{{ formatPrice(product.price) }}</span>
+                  @if (product.originalPrice && product.originalPrice > product.price) {
+                    <span class="price-original">{{ formatPrice(product.originalPrice) }}</span>
+                  }
+                </div>
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="addToCart(product)"
+                  [disabled]="!product.active || addingToCart() === product.id"
+                  [attr.aria-label]="'Adicionar ' + product.name + ' ao carrinho'"
+                >
+                  @if (addingToCart() === product.id) {
+                    ✓
+                  } @else {
+                    <svg
+                      width="15"
+                      height="15"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M9 6a3 3 0 1 1 6 0M5 6H3l1 13h16l1-13H5z" />
+                    </svg>
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      @if ((pageData()?.totalPages ?? 0) > 1) {
+        <div class="pagination">
+          <button
+            class="page-btn"
+            (click)="goToPage(currentPage() - 1)"
+            [disabled]="pageData()?.first"
+          >
+            ‹
+          </button>
+          @for (p of pages; track p) {
+            @if (p >= currentPage() - 2 && p <= currentPage() + 2) {
+              <button class="page-btn" [class.active]="p === currentPage()" (click)="goToPage(p)">
+                {{ p + 1 }}
+              </button>
+            }
+          }
+          <button
+            class="page-btn"
+            (click)="goToPage(currentPage() + 1)"
+            [disabled]="pageData()?.last"
+          >
+            ›
+          </button>
+        </div>
+      }
+    }
+  </main>
+</div>

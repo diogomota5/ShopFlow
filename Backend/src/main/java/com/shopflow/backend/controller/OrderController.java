@@ -4,6 +4,7 @@ import com.shopflow.backend.dto.request.OrderRequest;
 import com.shopflow.backend.dto.request.OrderTrackingRequest;
 import com.shopflow.backend.dto.response.ApiResponse;
 import com.shopflow.backend.dto.response.OrderResponse;
+import com.shopflow.backend.dto.response.DashboardResponse;
 import com.shopflow.backend.entity.enums.OrderStatus;
 import com.shopflow.backend.service.OrderService;
 import jakarta.validation.Valid;
@@ -43,6 +44,11 @@ public class OrderController {
                 ApiResponse.success("Pedido recuperado com sucesso", order, HttpStatus.OK));
     }
 
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<ApiResponse<OrderResponse>> cancelByCustomer(@PathVariable UUID orderId) {
+        return ResponseEntity.ok(ApiResponse.success("Pedido cancelado com sucesso", orderService.cancelByCustomer(orderId), HttpStatus.OK));
+    }
+
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getMyOrders(
             @RequestParam(required = false) OrderStatus status,
@@ -55,6 +61,22 @@ public class OrderController {
         Page<OrderResponse> orders = orderService.getMyOrders(status, startDate, endDate, minTotal, maxTotal, pageable);
         return ResponseEntity.ok(
                 ApiResponse.success("Lista de pedidos recuperada com sucesso", orders, HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/search")
+    public ResponseEntity<ApiResponse<Page<OrderResponse>>> getAllOrders(
+            @RequestParam(required = false) OrderStatus status,
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success("Pedidos recuperados com sucesso", orderService.getAllOrders(status, pageable), HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/dashboard")
+    public ResponseEntity<ApiResponse<DashboardResponse>> getDashboardSummary(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return ResponseEntity.ok(ApiResponse.success("Resumo do painel recuperado com sucesso", orderService.getDashboardSummary(startDate, endDate), HttpStatus.OK));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -87,6 +109,14 @@ public class OrderController {
         OrderResponse order = orderService.updateToCanceled(orderId);
         return ResponseEntity.ok(
                 ApiResponse.success("Pedido cancelado e produtos devolvidos ao estoque", order, HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/status/{orderId}/reopen")
+    public ResponseEntity<ApiResponse<OrderResponse>> reopenOrder(@PathVariable UUID orderId) {
+        OrderResponse order = orderService.reopenOrder(orderId);
+        return ResponseEntity.ok(
+                ApiResponse.success("Pedido reaberto como pendente e estoque reservado novamente", order, HttpStatus.OK));
     }
 
 }

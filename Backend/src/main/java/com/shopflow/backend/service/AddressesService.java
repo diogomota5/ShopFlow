@@ -28,17 +28,24 @@ public class AddressesService {
     private final AddressesMapper addressesMapper;
 
     @Transactional
-    public AddressesResponse createAddress(AddressesRequest request){
-        UUID userId = getLoggedUserId();
+    public AddressesResponse createAddress(AddressesRequest request) {
+        return createAddressInternal(getLoggedUserId(), request);
+    }
 
-        if(request.primaryAddress() || addressesRepository.findByUserId(userId).isEmpty()){
+    @Transactional
+    public AddressesResponse createAddressForUser(UUID userId, AddressesRequest request) {
+        return createAddressInternal(userId, request);
+    }
+
+    private AddressesResponse createAddressInternal(UUID userId, AddressesRequest request) {
+        if (request.primaryAddress() || addressesRepository.findByUserId(userId).isEmpty()) {
             addressesRepository.disablePrimaryAddressesByUserId(userId);
         }
 
-        Addresses address =addressesMapper.toEntity(request);
+        Addresses address = addressesMapper.toEntity(request);
         address.setUser(User.builder().id(userId).build());
 
-        if(addressesRepository.findByUserId(userId).isEmpty()){
+        if (addressesRepository.findByUserId(userId).isEmpty()) {
             address.setPrimaryAddress(true);
         }
 
@@ -47,24 +54,36 @@ public class AddressesService {
     }
 
     @Transactional(readOnly = true)
-    public List<AddressesResponse> getMyAddresses(){
-        UUID userId = getLoggedUserId();
+    public List<AddressesResponse> getMyAddresses() {
+        return getAddressesByUserId(getLoggedUserId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<AddressesResponse> getAddressesByUserId(UUID userId) {
         List<Addresses> addresses = addressesRepository.findByUserId(userId);
         return addressesMapper.toResponseList(addresses);
     }
 
     @Transactional
-    public AddressesResponse updateAddress(UUID addressId, AddressesRequest request){
-        UUID userId = getLoggedUserId();
+    public AddressesResponse updateAddress(UUID addressId, AddressesRequest request) {
+        return updateAddressInternal(addressId, request, false);
+    }
+
+    @Transactional
+    public AddressesResponse updateAddressAsAdmin(UUID addressId, AddressesRequest request) {
+        return updateAddressInternal(addressId, request, true);
+    }
+
+    private AddressesResponse updateAddressInternal(UUID addressId, AddressesRequest request, boolean isAdmin) {
         Addresses address = addressesRepository.findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado: " + addressId));
 
-        if (!address.getUser().getId().equals(userId)){
+        if (!isAdmin && !address.getUser().getId().equals(getLoggedUserId())) {
             throw new BusinessRuleException("Este endereço não pertence ao seu usuário");
         }
 
-        if(request.primaryAddress()){
-            addressesRepository.disablePrimaryAddressesByUserId(userId);
+        if (request.primaryAddress()) {
+            addressesRepository.disablePrimaryAddressesByUserId(address.getUser().getId());
         }
 
         addressesMapper.updateEntityFromRequest(request, address);
@@ -73,26 +92,34 @@ public class AddressesService {
     }
 
     @Transactional
-    public void deleteAddress(UUID addressId){
-        UUID userId = getLoggedUserId();
+    public void deleteAddress(UUID addressId) {
+        deleteAddressInternal(addressId, false);
+    }
+
+    @Transactional
+    public void deleteAddressAsAdmin(UUID addressId) {
+        deleteAddressInternal(addressId, true);
+    }
+
+    private void deleteAddressInternal(UUID addressId, boolean isAdmin) {
         Addresses address = addressesRepository.findById(addressId)
                 .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado: " + addressId));
 
-        if(!address.getUser().getId().equals(userId)){
+        if (!isAdmin && !address.getUser().getId().equals(getLoggedUserId())) {
             throw new BusinessRuleException("Este endereço não pertence ao seu usuário");
         }
 
-        if (address.getPrimaryAddress()){
-            throw new BusinessRuleException("Não é possível deletar seu endereço principal. Defina outro antes");
+        if (address.getPrimaryAddress()) {
+            throw new BusinessRuleException("Não é possível deletar um endereço principal. Defina outro antes");
         }
 
         addressesRepository.delete(address);
     }
 
-    private UUID getLoggedUserId(){
+    private UUID getLoggedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || !authentication.isAuthenticated()
-                || authentication instanceof AnonymousAuthenticationToken){
+        if (authentication == null || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
             throw new SecurityAuthenticationException("Usuário não está autenticado");
         }
         return ((JWTUserData) authentication.getPrincipal()).userId();

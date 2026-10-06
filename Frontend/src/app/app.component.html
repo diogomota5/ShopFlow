@@ -1,0 +1,17 @@
+<app-loading-spinner></app-loading-spinner>
+<app-confirm-dialog></app-confirm-dialog>
+<app-cookie-consent></app-cookie-consent>
+<div class="app-layout" [class.auth-mode]="!showChrome()">
+  <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+  @if (showChrome()) {
+    <app-navbar></app-navbar>
+  }
+
+  <main id="main-content" class="main-content" [class.main-content--auth]="!showChrome()">
+    <router-outlet></router-outlet>
+  </main>
+
+  @if (showChrome()) {
+    <app-footer></app-footer>
+  }
+</div>

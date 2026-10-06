@@ -1,0 +1,47 @@
+### Login ###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "diogo_mota1990@outlook.com",
+  "password": "123456"
+}
+
+###
+
+@baseUrl = http://localhost:8080/orders
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNTI0NjY4Mi0wZTY3LTQyMGEtOWJmNS0yNzgxNzE2MTQ1NTMiLCJzdWIiOiJkaW9nb0BvdXRsb29rLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzg0NzE5MTkzLCJpYXQiOjE3ODQ2MzI3OTN9.Jl6onnTtogdwzyt7D4uCt3kaL0hkvossN4dWBBbJGC4
+@adminToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMGM2YjE5OS1jYWYyLTRjNTctOGI1ZC0wOWYyOGY4OTlkYzQiLCJzdWIiOiJkaW9nb19tb3RhMTk5MEBvdXRsb29rLmNvbSIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTc4NDczMDE3MSwiaWF0IjoxNzg0NjQzNzcxfQ.o6BHsM7MY7vIxrmfEpt0CUCxo5d7m_F1b1W-G2tVLCA
+
+###add cart
+POST http://localhost:8080/carts/items
+Authorization: {{userToken}}
+Content-Type: application/json
+
+{
+  "productId": "f0c29b8b-be22-4b24-82fa-8712e46e4fa1",
+  "quantity": 1
+}
+
+###create
+POST {{baseUrl}}/create
+Authorization: {{userToken}}
+Content-Type: application/json
+
+{
+  "addressId": "2e18f5de-2a88-40d8-b9d0-bafeac94c421",
+  "notes": "Realizar a entrega no apartamento 402 caso não tenha ninguém em casa"
+}
+
+###search id
+GET {{baseUrl}}/search/a49212de-38ae-4228-aec0-d4a7820c7ee7
+Authorization: {{userToken}}
+
+###search all
+GET {{baseUrl}}/search
+Authorization: {{userToken}}
+
+###alter status
+PUT {{baseUrl}}/status/a49212de-38ae-4228-aec0-d4a7820c7ee7/deliver
+Authorization: {{adminToken}}
+

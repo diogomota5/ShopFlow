@@ -1,0 +1,45 @@
+# ============================
+# ShopFlow — .gitignore
+# ============================
+
+# ----- Credenciais e segredos -----
+Credenciais.env
+.env
+*.env
+!*.env.example
+
+# ----- Gradle -----
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ----- Java -----
+*.class
+*.jar
+*.war
+
+# ----- Node / NPM -----
+node_modules/
+
+# ----- Angular build -----
+dist/
+.angular/
+
+# ----- IDEs -----
+.idea/
+*.iml
+*.iws
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ----- macOS -----
+.DS_Store
+
+# ----- Logs -----
+*.log

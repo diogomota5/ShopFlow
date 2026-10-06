@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/coupons")
@@ -34,6 +35,19 @@ public class CouponController {
     public ResponseEntity<ApiResponse<List<CouponResponse>>> getAllCoupons(){
         return ResponseEntity.ok(
                 ApiResponse.success("Cupons recuperados", couponService.getAllCoupons(), HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse<CouponResponse>> updateCoupon(@PathVariable UUID id, @Valid @RequestBody CouponRequest request) {
+        return ResponseEntity.ok(ApiResponse.success("Cupom atualizado com sucesso", couponService.updateCoupon(id, request), HttpStatus.OK));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/active")
+    public ResponseEntity<ApiResponse<Void>> setActive(@PathVariable UUID id, @RequestParam boolean active) {
+        couponService.setActive(id, active);
+        return ResponseEntity.ok(ApiResponse.success(active ? "Cupom ativado" : "Cupom desativado", null, HttpStatus.OK));
     }
 
     @GetMapping("/validate")

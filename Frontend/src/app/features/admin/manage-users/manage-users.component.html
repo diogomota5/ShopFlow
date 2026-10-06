@@ -1,0 +1,57 @@
+<div class="admin-panel">
+  <div class="admin-panel__header">
+    <h2 class="admin-panel__title">Gerenciar Usuários</h2>
+    <p class="admin-panel__subtitle">Visualize e edite contas de usuários da plataforma.</p>
+  </div>
+  <div class="admin-panel__body">
+    @if (loading()) {
+      <div class="admin-alert admin-alert--info">Carregando usuários...</div>
+    }
+    @if (error()) {
+      <div class="admin-alert admin-alert--error">{{ error() }}</div>
+    }
+
+    @if (!loading() && !error()) {
+      @if (users().length === 0) {
+        <div class="admin-alert admin-alert--info">Nenhum usuário encontrado.</div>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Perfil</th>
+                <th>Status</th>
+                <th>Criado em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track user.id) {
+                <tr>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="admin-badge" [class.admin-badge--admin]="user.role === 'ADMIN'" [class.admin-badge--user]="user.role !== 'ADMIN'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="admin-badge" [class.admin-badge--active]="user.active" [class.admin-badge--inactive]="!user.active">
+                      {{ user.active ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </td>
+                  <td>{{ user.createdAt | date: 'dd/MM/yyyy' }}</td>
+                  <td>
+                    <a class="btn btn-outline btn-sm" [routerLink]="['/admin/users/edit', user.id]">Editar</a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </div>
+</div>

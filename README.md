@@ -1,237 +1,238 @@
-<div align="center">
+# 🛒 ShopFlow
 
-# 🛒 ShopFlow — E-commerce Full Stack
-
-> Plataforma de e-commerce completa com autenticação JWT, painel administrativo e fluxo de pedidos.
-
-[![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://www.java.com)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat-square&logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Angular](https://img.shields.io/badge/Angular-17-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.io)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-316192?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com)
-
-[**🌐 Demo ao vivo**](https://seu-projeto.vercel.app) · [**📖 Documentação da API**](https://seu-backend.railway.app/swagger-ui.html) · [**📋 Reportar bug**](https://github.com/seu-usuario/shopflow/issues)
-
-![Demo do projeto](./docs/demo.gif)
-
-</div>
+Um sistema **Full Stack** de **e-commerce**, desenvolvido para meu portfólio com foco em **boas práticas**, **arquitetura organizada** e **experiência real de projeto** (frontend + backend + banco).
 
 ---
 
-## 📌 Sobre o projeto
+## ✨ Visão geral
 
-O **ShopFlow** é uma aplicação full stack de e-commerce desenvolvida como projeto de portfólio, com foco em boas práticas de desenvolvimento, arquitetura limpa e recursos valorizados no mercado.
+O ShopFlow permite que o usuário:
 
-A aplicação conta com fluxo completo de compra — do cadastro de produtos à finalização do pedido — além de painel administrativo para gestão da loja.
+- 🔐 **Crie sua conta e faça login** com autenticação JWT
+- 🛍️ **Navegue pelo catálogo** de produtos com busca e filtros por categoria e preço
+- 🛒 **Monte seu carrinho**, ajustando quantidades em tempo real
+- 📦 **Finalize pedidos** e acompanhe o status da compra
+- ⭐ **Avalie produtos** que já comprou, com nota e comentário
+- 🎟️ **Aplique cupons de desconto** no checkout
 
-### ✨ Funcionalidades principais
+E o administrador pode:
 
-- **Autenticação** — Registro, login e refresh token com JWT + Spring Security
-- **Catálogo de produtos** — Listagem, busca, filtros por categoria e faixa de preço, paginação
-- **Carrinho de compras** — Persistido por usuário, atualização em tempo real
-- **Fluxo de pedidos** — Estados: `PENDENTE → PAGO → ENVIADO → ENTREGUE`
-- **Painel Admin** — Gerenciamento de produtos, pedidos e usuários (ROLE_ADMIN)
-- **Avaliações** — Usuários podem avaliar produtos com nota e comentário
-- **Upload de imagens** — Imagens de produtos via integração com Cloudinary
-- **Documentação da API** — Swagger UI com todos os endpoints documentados
-
----
-
-## 🧱 Arquitetura e tecnologias
-
-### Backend
-| Tecnologia | Uso |
-|---|---|
-| Java 17 + Spring Boot 3 | Framework principal |
-| Spring Security + JWT | Autenticação e autorização |
-| Spring Data JPA + Hibernate | Persistência de dados |
-| PostgreSQL 15 | Banco de dados relacional |
-| Flyway | Controle de versão do banco |
-| MapStruct | Mapeamento DTO ↔ Entidade |
-| Swagger / OpenAPI 3 | Documentação da API |
-| JUnit 5 + Mockito | Testes unitários |
-| Docker Compose | Ambiente de desenvolvimento |
-
-### Frontend
-| Tecnologia | Uso |
-|---|---|
-| Angular 17 | Framework SPA |
-| TypeScript | Tipagem estática |
-| Angular Material | Componentes de UI |
-| RxJS | Programação reativa |
-| HTTP Interceptor | Injeção automática do JWT |
-| Auth Guard | Proteção de rotas |
-| Chart.js / ng2-charts | Gráficos no painel admin |
+- 🗂️ Gerenciar categorias e produtos, com upload de imagens
+- 📦 Acompanhar e atualizar o status de todos os pedidos da loja
+- 🎟️ Criar e controlar cupons de desconto
 
 ---
 
-## 🗂️ Estrutura do projeto
+## 🎯 Objetivo do projeto
+
+Este projeto foi criado para demonstrar, na prática, minha capacidade de:
+
+- Construir uma **API REST** completa e bem estruturada
+- Integrar **Frontend (Angular)** com **Backend (Spring Boot)**
+- Modelar um banco de dados relacional com relacionamentos reais de um e-commerce
+- Persistir dados com **JPA/Hibernate** e versionar o schema com **Flyway**
+- Aplicar padrões comuns do mercado (services, guards, interceptors, DTOs, mappers, specifications)
+- Integrar serviços externos (upload de imagens com **Cloudinary**)
+
+---
+
+## 🧠 O que eu implementei (destaques)
+
+- ✅ **Arquitetura em camadas** (Controller → Service → Repository)
+- ✅ **DTOs** para padronizar requests e responses (ex.: `ProductRequest`, `OrderResponse`)
+- ✅ **Mappers com MapStruct** para conversão entre Entity e DTO
+- ✅ **Tratamento global de erros** (Global Exception Handler) com resposta padronizada
+- ✅ **Autenticação com JWT** + Spring Security, com perfis `USER` e `ADMIN`
+- ✅ **Filtros dinâmicos** com Specification (busca por nome, categoria e faixa de preço)
+- ✅ **Snapshot de dados históricos** — preço e nome do produto preservados em cada pedido, mesmo que o produto mude depois
+- ✅ **Controle de estoque** automático a cada pedido criado ou cancelado
+- ✅ **Upload de imagens** via integração com Cloudinary
+- ✅ **Rotas protegidas** no Angular (Auth Guard)
+- ✅ **Interceptor HTTP** para enviar o token JWT automaticamente
+- ✅ Integração completa **Front ↔ API ↔ Banco**
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+### 🔙 Backend
+
+- ☕ **Java 17**
+- 🌱 **Spring Boot 3**
+- 🌐 **Spring Web (API REST)**
+- 🔐 **Spring Security + JWT**
+- 🗄️ **Spring Data JPA / Hibernate**
+- 🐘 **PostgreSQL**
+- 🔄 **Flyway** (versionamento do banco)
+- 🧩 **MapStruct** (mapeamento DTO ↔ Entity)
+- ⚙️ **Gradle**
+- 🧯 **Global Exception Handler**
+- ☁️ **Cloudinary** (upload de imagens)
+
+### 🔜 Frontend
+
+- 🅰️ **Angular**
+- 🔁 **HTTP Client**
+- 🛡️ **Auth Guard**
+- 🧩 **HTTP Interceptor**
+- 🧱 Estrutura por módulos/pastas: `core/` e `features/`
+
+---
+
+## 🗄️ Como funciona a comunicação com o banco
+
+O backend utiliza **Spring Data JPA**, onde:
+
+- As **Entities** representam as tabelas (ex.: `Product`, `Order`, `Cart`)
+- Os **Repositories** fazem o acesso ao banco (CRUD, consultas e Specifications)
+- O **Hibernate** faz o mapeamento objeto-relacional automaticamente
+- O **Flyway** versiona e aplica as alterações do schema automaticamente na inicialização
+- A configuração de conexão fica no arquivo:
+
+📌 `src/main/resources/application.properties`
+
+---
+
+## 🧭 Estrutura do projeto (organização)
+
+- `src/main/java/...`
+  - `controller/` → endpoints REST
+  - `service/` → regras de negócio
+  - `repository/` → persistência com JPA
+  - `specification/` → filtros dinâmicos de busca
+  - `entity/` → entidades do banco
+  - `dto/request/` e `dto/response/` → objetos de entrada e saída da API
+  - `mapper/` → conversão entre Entity e DTO
+  - `exception/` → tratamento global de erros
+  - `config/` → segurança, JWT e Cloudinary
+- `src/main/resources/db/migration/` → migrations versionadas com Flyway
+- `frontend/src/app/`
+  - `core/` → auth, services, interceptors, guards
+  - `features/` → páginas (auth, products, cart, orders, admin)
+
+---
+
+## 🗺️ Modelo do banco de dados
 
 ```
-shopflow/
-├── backend/                    # API Spring Boot
-│   ├── src/main/java/com/shopflow/
-│   │   ├── config/             # Configs de segurança, Swagger, CORS
-│   │   ├── controller/         # Endpoints REST
-│   │   ├── dto/                # Data Transfer Objects (request/response)
-│   │   ├── entity/             # Entidades JPA
-│   │   ├── exception/          # GlobalExceptionHandler + exceções customizadas
-│   │   ├── mapper/             # MapStruct mappers
-│   │   ├── repository/         # Spring Data JPA repositories
-│   │   └── service/            # Regras de negócio
-│   ├── src/main/resources/
-│   │   ├── db/migration/       # Flyway migrations
-│   │   └── application.yml     # Configurações da aplicação
-│   └── src/test/               # Testes unitários e de integração
-│
-├── frontend/                   # SPA Angular
-│   └── src/app/
-│       ├── core/               # Guards, interceptors, services globais
-│       ├── shared/             # Componentes e pipes reutilizáveis
-│       └── features/
-│           ├── auth/           # Login e registro
-│           ├── products/       # Catálogo e detalhes do produto
-│           ├── cart/           # Carrinho de compras
-│           ├── orders/         # Histórico de pedidos
-│           └── admin/          # Painel administrativo
-│
-├── docs/                       # Prints e GIF de demonstração
-├── docker-compose.yml          # PostgreSQL + pgAdmin
-└── README.md
+User ──< Order ──< OrderItem >── Product >── Category
+  │                                  │
+  ├──< Cart ──< CartItem             │
+  │                                  │
+  └──< Assessment >──────────────────┘
+              (avaliação de produto)
+
+Coupon ──< Order (cupom aplicado no pedido)
 ```
 
 ---
 
-## ⚙️ Como rodar localmente
+## 🚀 Como rodar o projeto localmente
 
-### Pré-requisitos
+### ✅ Pré-requisitos
 
-- [Java 17+](https://adoptium.net/)
-- [Node.js 18+](https://nodejs.org/)
-- [Docker e Docker Compose](https://www.docker.com/)
-- [Angular CLI](https://angular.io/cli): `npm install -g @angular/cli`
+- ☕ **Java 17+**
+- 🟢 **Node.js 18+**
+- 🅰️ **Angular CLI**
+- 🐳 **Docker e Docker Compose**
 
-### 1. Clone o repositório
+### 1️⃣ Suba o banco de dados
+
+Na raiz do projeto:
 
 ```bash
-git clone https://github.com/seu-usuario/shopflow.git
-cd shopflow
-```
-
-### 2. Suba o banco de dados
-
-```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 > Isso inicia o PostgreSQL na porta `5432` e o pgAdmin na porta `5050`.
 
-### 3. Configure as variáveis de ambiente do backend
+### 2️⃣ Configure as variáveis de ambiente
 
-Crie o arquivo `backend/src/main/resources/application-local.yml`:
+Crie o arquivo `.env` na raiz do backend com suas credenciais (banco, JWT e Cloudinary). Veja o `.env.example` como referência.
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/shopflow
-    username: postgres
-    password: postgres
+### 3️⃣ Backend (Spring Boot)
 
-jwt:
-  secret: SUA_CHAVE_SECRETA_AQUI_MINIMO_256_BITS
-  expiration: 86400000 # 24 horas em ms
-
-cloudinary:
-  cloud-name: seu-cloud-name
-  api-key: sua-api-key
-  api-secret: seu-api-secret
-```
-
-### 4. Rode o backend
+Na pasta `backend/`:
 
 ```bash
-cd backend
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+./gradlew bootRun
 ```
 
 A API estará disponível em `http://localhost:8080`
-Swagger UI: `http://localhost:8080/swagger-ui.html`
 
-### 5. Rode o frontend
+### 4️⃣ Frontend (Angular)
+
+Na pasta `frontend/`:
 
 ```bash
 cd frontend
 npm install
-ng serve
+npm start
 ```
 
 A aplicação estará disponível em `http://localhost:4200`
 
 ---
 
-## 🔐 Credenciais para teste
+## 📸 Imagens do Projeto
 
-| Perfil | E-mail | Senha |
-|---|---|---|
-| Administrador | admin@shopflow.com | admin123 |
-| Cliente | cliente@shopflow.com | cliente123 |
+<figure>
+  <img width="1912" height="847" alt="tela de login" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Tela de login</figcaption>
+</figure>
+<br> <br>
 
----
+<figure>
+  <img width="1912" height="843" alt="catálogo de produtos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Catálogo de produtos</figcaption>
+</figure>
+<br> <br>
 
-## 🗃️ Modelo do banco de dados
+<figure>
+  <img width="1886" height="805" alt="carrinho de compras" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Carrinho de compras</figcaption>
+</figure>
+<br> <br>
 
-```
-Usuario ──< Pedido ──< ItemPedido >── Produto >── Categoria
-                                                     │
-                                               Avaliacao
-                                               (Usuario + Produto)
-```
+<figure>
+  <img width="1888" height="810" alt="checkout" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Checkout - Finalização do pedido</figcaption>
+</figure>
+<br> <br>
 
-As migrations Flyway estão em `backend/src/main/resources/db/migration/` e são executadas automaticamente na inicialização.
+<figure>
+  <img width="1878" height="822" alt="histórico de pedidos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Histórico de pedidos</figcaption>
+</figure>
+<br> <br>
 
----
+<figure>
+  <img width="1892" height="841" alt="painel admin produtos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Painel Admin - Produtos</figcaption>
+</figure>
+<br> <br>
 
-## 🧪 Testes
+<figure>
+  <img width="1886" height="761" alt="painel admin pedidos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Painel Admin - Pedidos</figcaption>
+</figure>
+<br> <br>
 
-```bash
-# Rodar todos os testes
-cd backend
-./mvnw test
-
-# Relatório de cobertura (JaCoCo)
-./mvnw verify
-# Relatório gerado em: target/site/jacoco/index.html
-```
-
----
-
-## 🚀 Deploy
-
-| Serviço | Plataforma |
-|---|---|
-| Backend (API) | [Railway](https://railway.app) |
-| Frontend | [Vercel](https://vercel.com) |
-| Banco de dados | Railway PostgreSQL |
-| Imagens | Cloudinary |
+<figure>
+  <img width="1872" height="688" alt="avaliações de produto" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
+  <figcaption>Avaliações de produto</figcaption>
+</figure>
+<br> <br>
 
 ---
 
 ## 🔭 Próximos passos
 
 - [ ] Integração com gateway de pagamento (Mercado Pago Sandbox)
-- [ ] Notificação por e-mail ao confirmar pedido (JavaMailSender)
+- [ ] Notificação por e-mail ao confirmar pedido
 - [ ] CI/CD com GitHub Actions
-- [ ] Cache com Redis para produtos mais acessados
-- [ ] Testes de integração com Testcontainers
-
----
-
-## 👨‍💻 Autor
-
-Feito com 💙 por **Seu Nome**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-seu--perfil-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/diogomota05)
-[![GitHub](https://img.shields.io/badge/GitHub-seu--usuario-181717?style=flat-square&logo=github)](https://github.com/diogomota5)
+- [ ] Deploy em produção (Railway + Vercel)
+- [ ] Testes unitários com JUnit 5 + Mockito
 
 ---
 

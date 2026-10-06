@@ -1,0 +1,225 @@
+@if (loadingProduct()) {
+  <div class="container page-main">
+    <div class="detail-skeleton">
+      <div class="skeleton" style="aspect-ratio: 1; border-radius: 16px"></div>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 1rem">
+        <div class="skeleton" style="height: 2rem; width: 60%"></div>
+        <div class="skeleton" style="height: 1rem; width: 40%"></div>
+        <div class="skeleton" style="height: 3rem; width: 30%"></div>
+        <div class="skeleton" style="height: 100px"></div>
+      </div>
+    </div>
+  </div>
+} @else if (product()) {
+  <div class="container page-main animate-fade-in">
+    <div class="breadcrumb text-sm text-muted">
+      <a routerLink="/">Início</a> / <a routerLink="/products">Produtos</a> /
+      <span>{{ product()!.name | titlecase }}</span>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Image -->
+      <div class="detail-image-area">
+        <div class="main-image-wrap card">
+          @if (product()!.imageUrl) {
+            <img [src]="product()!.imageUrl" [alt]="product()!.name" class="main-img" />
+          } @else {
+            <div class="img-placeholder">📷</div>
+          }
+          @if (getDiscountPct(); as d) {
+            <span class="detail-badge">-{{ d }}%</span>
+          }
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="detail-info">
+        <span class="badge badge-primary">{{ product()!.categoryName | titlecase }}</span>
+        <h1 class="detail-name">{{ product()!.name | titlecase }}</h1>
+
+        <!-- Rating summary -->
+        @if (rating(); as r) {
+          <div class="rating-summary">
+            <div class="stars">
+              @for (s of starsArray(5); track s) {
+                <span [class.filled]="s <= Math.round(r.averageRating)">★</span>
+              }
+            </div>
+            <span class="rating-value">{{ r.averageRating | number: '1.1-1' }}</span>
+            <span class="text-muted text-sm">({{ r.totalAssessments }} avaliações)</span>
+          </div>
+        }
+
+        <!-- Price -->
+        <div class="detail-price">
+          <span class="price text-3xl">{{ formatPrice(product()!.price) }}</span>
+          @if (product()!.originalPrice && product()!.originalPrice! > product()!.price) {
+            <span class="price-original">{{ formatPrice(product()!.originalPrice!) }}</span>
+          }
+        </div>
+
+        <!-- Stock -->
+        <div class="stock-info">
+          @if (product()!.stock > 0) {
+            <span class="badge badge-success">✓ Em estoque ({{ product()!.stock }} unidades)</span>
+          } @else {
+            <span class="badge badge-danger">✗ Fora de estoque</span>
+          }
+        </div>
+
+        <!-- Description -->
+        <p class="detail-desc">{{ product()!.description }}</p>
+
+        <!-- Quantity + Add to Cart -->
+        @if (product()!.stock > 0 && product()!.active) {
+          <div class="atc-section">
+            <label class="form-label">Quantidade</label>
+            <div class="qty-stepper">
+                <button
+                class="qty-btn"
+                (click)="quantity.update((v) => Math.max(1, v - 1))"
+                [disabled]="quantity() <= 1"
+                  aria-label="Diminuir quantidade"
+              >
+                −
+              </button>
+              <span class="qty-value">{{ quantity() }}</span>
+                <button
+                class="qty-btn"
+                (click)="quantity.update((v) => Math.min(product()!.stock, v + 1))"
+                [disabled]="quantity() >= product()!.stock"
+                  aria-label="Aumentar quantidade"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          @if (cartAdded()) {
+            <div class="cart-success alert alert-success animate-scale-in">
+              ✅ Adicionado ao carrinho! <a routerLink="/cart">Ver carrinho →</a>
+            </div>
+          }
+
+          <div class="atc-buttons">
+            <button
+              class="btn btn-primary btn-lg"
+              (click)="addToCart()"
+              [disabled]="addingToCart()"
+            >
+              @if (addingToCart()) {
+                <span class="btn-spinner"></span> Adicionando…
+              } @else {
+                <svg
+                  width="20"
+                  height="20"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 6a3 3 0 1 1 6 0M5 6H3l1 13h16l1-13H5z" />
+                </svg>
+                Adicionar ao carrinho
+              }
+            </button>
+            <a routerLink="/cart" class="btn btn-outline btn-lg">Ver carrinho</a>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <h2 class="section-title" style="margin-bottom: 2rem">Avaliações dos clientes</h2>
+
+      @if (auth.isLoggedIn()) {
+        <div class="review-form card" style="padding: 1.5rem; margin-bottom: 2rem">
+          <h3 style="margin-bottom: 1rem; font-size: 1rem">Escreva uma avaliação</h3>
+          <div class="form-group">
+            <label class="form-label">Sua nota</label>
+            <div class="star-input">
+              @for (s of starsArray(5); track s) {
+                <button
+                  type="button"
+                  class="star-btn"
+                  [class.active]="s <= newRating()"
+                  (click)="newRating.set(s)"
+                  [attr.aria-label]="'Dar ' + s + ' estrelas'"
+                >
+                  ★
+                </button>
+              }
+            </div>
+          </div>
+          <div class="form-group" style="margin-top: 0.75rem">
+            <label class="form-label" for="review-title">Título</label>
+            <input
+              id="review-title"
+              class="form-control"
+              type="text"
+              placeholder="Resumo da sua experiência"
+              [(ngModel)]="newTitle"
+              maxlength="100"
+            />
+          </div>
+          <div class="form-group" style="margin-top: 0.75rem">
+            <label class="form-label" for="review-comment">Comentário</label>
+            <textarea
+              id="review-comment"
+              class="form-control"
+              rows="3"
+              placeholder="Conte sua experiência…"
+              [(ngModel)]="newComment"
+            ></textarea>
+          </div>
+          @if (reviewError()) {
+            <p class="form-error" style="margin-top: 0.5rem">{{ reviewError() }}</p>
+          }
+          <button
+            class="btn btn-primary"
+            style="margin-top: 1rem"
+            (click)="submitReview()"
+            [disabled]="!newTitle.trim() || submittingReview()"
+          >
+            @if (submittingReview()) {
+              Enviando…
+            } @else {
+              Enviar avaliação
+            }
+          </button>
+        </div>
+      }
+
+      <div class="reviews-list">
+        @if (reviews()?.content?.length === 0) {
+          <p class="text-muted">Ainda não há avaliações. Seja o primeiro!</p>
+        }
+        @for (review of reviews()?.content ?? []; track review.id) {
+          <div class="review-card card" style="padding: 1.25rem; margin-bottom: 1rem">
+            <div class="review-header">
+              <div>
+                <span class="font-semibold">{{ review.userName }}</span>
+                <div class="stars text-sm">
+                  @for (s of starsArray(5); track s) {
+                    <span [style.color]="s <= review.rating ? 'var(--accent)' : 'var(--border)'"
+                      >★</span
+                    >
+                  }
+                </div>
+              </div>
+              <span class="text-sm text-muted">{{ review.createdAt | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--text-secondary)">
+              @if (review.title) {
+                <strong>{{ review.title }}</strong
+                ><br />
+              }
+              {{ review.comment }}
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

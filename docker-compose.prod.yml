@@ -1,0 +1,86 @@
+# ============================================================
+# docker-compose.prod.yml — Ambiente de Produção
+# ============================================================
+# Modo de uso:
+#   docker compose -f docker-compose.prod.yml --env-file Credenciais.env up -d --build
+# ============================================================
+
+services:
+
+  # ---- Banco de Dados ----
+  postgres:
+    image: postgres:17-alpine
+    container_name: shopflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shopflow
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - shopflow-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d shopflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---- Backend Spring Boot ----
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: shopflow-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/shopflow
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      HIBERNATE_DDL_AUTO: validate
+      SHOW_SQL: "false"
+      JWT_SECRET: ${JWT_SECRET}
+      CLOUDINARY_NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_KEY: ${CLOUDINARY_KEY}
+      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-true}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-true}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+    networks:
+      - shopflow-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ---- Frontend Angular (servido via Nginx) ----
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: shopflow-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    networks:
+      - shopflow-net
+
+volumes:
+  postgres_data:
+
+networks:
+  shopflow-net:
+    driver: bridge

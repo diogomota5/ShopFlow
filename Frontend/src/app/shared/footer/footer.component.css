@@ -1,0 +1,98 @@
+.footer {
+  background: linear-gradient(180deg, #0b0f17 0%, #121722 100%);
+  border-top: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+  margin-top: auto;
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+  padding-block: 3rem;
+}
+.footer-logo {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #f8f6ff;
+}
+.footer-logo span {
+  color: var(--primary-light);
+}
+.footer-tagline {
+  color: #aab0c0;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  max-width: 320px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.footer-col h4 {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #d9def2;
+  margin-bottom: 0.25rem;
+}
+.footer-col a {
+  font-size: 0.9rem;
+  color: #d9def2;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.footer-col a:hover {
+  color: var(--primary-light);
+}
+
+.footer-bottom {
+  border-top: 1px solid color-mix(in srgb, #ffffff 8%, transparent);
+  padding-block: 1rem;
+}
+.footer-bottom .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #aab0c0;
+}
+.heart {
+  color: var(--danger);
+}
+
+/* ── Light Mode Overrides ────────────────────────────────── */
+:host-context([data-theme='light']) .footer {
+  background: var(--surface-card);
+  border-top: 1px solid var(--border);
+}
+:host-context([data-theme='light']) .footer-logo {
+  color: var(--text-primary);
+}
+:host-context([data-theme='light']) .footer-tagline {
+  color: var(--text-secondary);
+}
+:host-context([data-theme='light']) .footer-col h4 {
+  color: var(--text-primary);
+}
+:host-context([data-theme='light']) .footer-col a {
+  color: var(--text-secondary);
+}
+:host-context([data-theme='light']) .footer-col a:hover {
+  color: var(--primary);
+}
+:host-context([data-theme='light']) .footer-bottom {
+  border-top-color: var(--border);
+}
+:host-context([data-theme='light']) .footer-bottom .container {
+  color: var(--text-secondary);
+}

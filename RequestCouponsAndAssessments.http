@@ -1,0 +1,52 @@
+### Login ###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "diogo_mota1990@outlook.com",
+  "password": "123456"
+}
+
+###
+@baseurl = http://localhost:8080
+@adminToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMGM2YjE5OS1jYWYyLTRjNTctOGI1ZC0wOWYyOGY4OTlkYzQiLCJzdWIiOiJkaW9nb19tb3RhMTk5MEBvdXRsb29rLmNvbSIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTc4NDk4MTM2NSwiaWF0IjoxNzg0ODk0OTY1fQ.bDtvpyXY-xcrgClRiEEdCdNdqq_aUlh3lfNnVVLjJTQ
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNTI0NjY4Mi0wZTY3LTQyMGEtOWJmNS0yNzgxNzE2MTQ1NTMiLCJzdWIiOiJkaW9nb0BvdXRsb29rLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzg0OTgxMzE2LCJpYXQiOjE3ODQ4OTQ5MTZ9.jAXoiBfvHSd9eKBLOZgOIxnEWwbXoidIvfkLx2HSfYg
+
+### create coupon fixed
+POST {{baseurl}}/coupons/create
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "code": "SHOPFLOW20",
+  "discountValue": 20.00,
+  "discountType": "FIXED",
+  "minPurchaseValue": 100.00,
+  "expirationDate": "2027-12-31T23:59:59",
+  "maxUses": 50,
+  "active": "true"
+}
+
+### create coupon percentage
+POST {{baseurl}}/coupons/create
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+  "code": "PROMO10",
+  "discountValue": 10.00,
+  "discountType": "PERCENTAGE",
+  "minPurchaseValue": 0.00,
+  "expirationDate": "2027-12-31T23:59:59",
+  "maxUses": 0,
+  "active": "true"
+}
+
+### search coupons
+GET {{baseurl}}/coupons/search
+Authorization: {{adminToken}}
+
+### validate coupons
+GET {{baseurl}}/coupons/validate?code=PROMO10&cartTotal=150.00
+Authorization: {{adminToken}}
+

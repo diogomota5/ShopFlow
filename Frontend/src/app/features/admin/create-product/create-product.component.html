@@ -1,0 +1,174 @@
+<div class="admin-panel">
+  <div class="admin-panel__header">
+    <h2 class="admin-panel__title">
+      {{ editingProductId ? 'Editar Produto' : 'Criar Novo Produto' }}
+    </h2>
+    <p class="admin-panel__subtitle">Preencha os dados do produto para adicioná-lo ao catálogo.</p>
+  </div>
+  <div class="admin-panel__body">
+    @if (message) {
+      <div class="admin-alert admin-alert--success">{{ message }}</div>
+    }
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="admin-form">
+      <div class="admin-form-group">
+        <label for="prod-name">Nome do Produto</label>
+        <input
+          id="prod-name"
+          type="text"
+          formControlName="name"
+          class="form-control"
+          placeholder="Ex: Fone Bluetooth Pro"
+        />
+      </div>
+
+      <div class="admin-form-group">
+        <label for="prod-desc">Descrição</label>
+        <textarea
+          id="prod-desc"
+          formControlName="description"
+          class="form-control"
+          placeholder="Descreva o produto..."
+        ></textarea>
+      </div>
+
+      <div class="admin-form-row">
+        <div class="admin-form-group">
+          <label for="prod-price">Preço Promocional (R$)</label>
+          <input
+            id="prod-price"
+            type="number"
+            formControlName="price"
+            step="0.01"
+            class="form-control"
+          />
+        </div>
+        <div class="admin-form-group">
+          <label for="prod-orig-price">Preço Original (R$)</label>
+          <input
+            id="prod-orig-price"
+            type="number"
+            formControlName="originalPrice"
+            step="0.01"
+            class="form-control"
+          />
+        </div>
+        <div class="admin-form-group">
+          <label for="prod-stock">Estoque</label>
+          <input id="prod-stock" type="number" formControlName="stock" class="form-control" />
+        </div>
+      </div>
+
+      <div class="admin-form-row">
+        <div class="admin-form-group">
+          <label for="prod-sku">SKU (Código)</label>
+          <input id="prod-sku" type="text" formControlName="sku" class="form-control" />
+        </div>
+        <div class="admin-form-group">
+          <label for="prod-cat">Categoria</label>
+          <select id="prod-cat" formControlName="categoryId" class="form-control">
+            <option value="">Selecione uma categoria</option>
+            @for (cat of categories; track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-form-group">
+        <label for="prod-img">Imagem do Produto</label>
+        <input
+          id="prod-img"
+          type="file"
+          (change)="onFileSelected($event)"
+          class="admin-file-input"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="admin-form-actions">
+        @if (editingProductId) {
+          <button type="button" class="btn btn-outline" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">
+            Salvar Alterações
+          </button>
+        } @else {
+          <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">
+            Criar Produto
+          </button>
+        }
+      </div>
+    </form>
+  </div>
+</div>
+
+<section class="admin-panel admin-list-panel">
+  <div class="admin-panel__header">
+    <h2 class="admin-panel__title">Produtos cadastrados</h2>
+    <div class="admin-search-row">
+      <input
+        class="form-control"
+        [(ngModel)]="productSearch"
+        (keyup.enter)="loadProducts()"
+        placeholder="Buscar por nome do produto"
+        aria-label="Buscar produtos"
+      />
+      <button class="btn btn-outline" type="button" (click)="loadProducts()">Buscar</button>
+    </div>
+  </div>
+  <div class="admin-panel__body admin-table-wrap">
+    @if (products.length) {
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Estoque</th>
+            <th>Preço</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of products; track product.id) {
+            <tr>
+              <td>{{ product.name | titlecase }}</td>
+              <td>{{ product.categoryName | titlecase }}</td>
+              <td>{{ product.stock }}</td>
+              <td>{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+              <td>
+                <span
+                  class="admin-badge"
+                  [class.admin-badge--active]="product.active"
+                  [class.admin-badge--inactive]="!product.active"
+                >
+                  {{ product.active ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="admin-actions">
+                <button
+                  class="btn btn-sm btn-edit"
+                  (click)="startEditProduct(product)"
+                  title="Editar"
+                >
+                  ✏️ Editar
+                </button>
+                <button
+                  class="btn btn-sm"
+                  [class.btn-danger]="product.active"
+                  [class.btn-success]="!product.active"
+                  (click)="toggleProduct(product)"
+                  [title]="product.active ? 'Desativar' : 'Ativar'"
+                >
+                  {{ product.active ? '🚫 Desativar' : '✅ Ativar' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="admin-empty-state">Nenhum produto encontrado.</p>
+    }
+  </div>
+</section>

@@ -1,0 +1,127 @@
+@import '../login/login.component.css';
+
+.auth-shell--register {
+  height: min(700px, calc(100dvh - 0.8rem));
+}
+
+.auth-shell--register .auth-card {
+  justify-content: flex-start;
+  padding-top: clamp(0.7rem, 1.8vh, 1.15rem);
+  padding-bottom: clamp(0.7rem, 1.8vh, 1.15rem);
+}
+
+.auth-shell--register .auth-card form {
+  gap: clamp(0.35rem, 1vh, 0.65rem);
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 0.7rem;
+}
+
+.optional {
+  font-weight: 400;
+  text-transform: none;
+  font-size: 0.75em;
+  color: var(--text-disabled);
+}
+
+.strength-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 0.3rem;
+}
+
+.strength-segment {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  transition: background var(--transition-base);
+}
+
+.strength-segment.filled[data-level='weak'] {
+  background: var(--danger);
+}
+
+.strength-segment.filled[data-level='medium'] {
+  background: var(--warning);
+}
+
+.strength-segment.filled[data-level='strong'] {
+  background: var(--success);
+}
+
+.strength-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-left: 0.3rem;
+  min-width: 42px;
+  text-align: right;
+}
+
+.strength-label[data-level='weak'] {
+  color: var(--danger);
+}
+
+.strength-label[data-level='medium'] {
+  color: var(--warning);
+}
+
+.strength-label[data-level='strong'] {
+  color: var(--success);
+}
+
+.success-state {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+  animation: scale-in var(--transition-spring) both;
+}
+
+.success-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 0.85rem;
+  border-radius: 50%;
+  background: var(--success-alpha);
+  color: var(--success);
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  border: 2px solid var(--success);
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 800px) {
+  .auth-shell--register {
+    width: min(440px, 100%);
+  }
+
+  .form-row-2 {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-height: 700px) {
+  .auth-shell--register .auth-logo {
+    margin-bottom: 0.3rem;
+  }
+
+  .auth-shell--register .auth-subtitle {
+    margin-bottom: 0.4rem;
+  }
+}

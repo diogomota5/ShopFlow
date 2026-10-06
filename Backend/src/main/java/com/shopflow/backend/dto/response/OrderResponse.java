@@ -23,4 +23,5 @@ public record OrderResponse(
     String trackingCode,
     String notes,
     List<OrderItemResponse> items,
+    List<OrderStatusHistoryResponse> statusHistory,
     LocalDateTime createdAt) {}
