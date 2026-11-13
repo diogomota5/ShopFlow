@@ -9,7 +9,7 @@
   padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--surface-card) 0%, #fcfbff 100%);
+  background: linear-gradient(180deg, var(--surface-card) 0%, var(--surface-raised) 100%);
   box-shadow: var(--shadow-sm);
 }
 
@@ -45,6 +45,9 @@
 }
 
 .address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
@@ -53,7 +56,11 @@
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
+  gap: 1rem;
+}
+
+.address-form button[type='submit'] {
+  align-self: flex-start;
 }
 
 .checkout-summary {
@@ -62,7 +69,7 @@
   top: 5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--surface-card) 0%, #fcfbff 100%);
+  background: linear-gradient(180deg, var(--surface-card) 0%, var(--surface-raised) 100%);
   box-shadow: var(--shadow-sm);
 }
 
