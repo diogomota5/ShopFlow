@@ -177,50 +177,140 @@ A aplicação estará disponível em `http://localhost:4200`
 ## 📸 Imagens do Projeto
 
 <figure>
-  <img width="1912" height="847" alt="tela de login" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Tela de login</figcaption>
+  <img width="1917" height="861" alt="TelaLogin" src="https://github.com/user-attachments/assets/4b187099-6d5a-4505-8e85-3022a9449325" />
+  <figcaption>Tela de Login</figcaption>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1912" height="843" alt="catálogo de produtos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Catálogo de produtos</figcaption>
+  <img width="1917" height="862" alt="TelaCadastro_Shopflow" src="https://github.com/user-attachments/assets/b1555f37-ed04-4e20-843a-c34e06fa02d6" />          
+  <figcaption>Tela de Cadastro</figcaption>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1886" height="805" alt="carrinho de compras" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Carrinho de compras</figcaption>
+  <img width="1917" height="855" alt="PaginaInicial" src="https://github.com/user-attachments/assets/3d908552-79be-4322-a307-510f08e2fc81" />
+  <figcaption>Página Inicial</figcaption>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1888" height="810" alt="checkout" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Checkout - Finalização do pedido</figcaption>
+   <img width="1906" height="487" alt="PaginaInicial1" src="https://github.com/user-attachments/assets/5f0e3452-6ca1-41fc-9445-f45a41c4af3d" />
+   <figcapition>Página Inicial 1</figcaption>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1878" height="822" alt="histórico de pedidos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Histórico de pedidos</figcaption>
+  <img width="1912" height="856" alt="PaginaInicial2" src="https://github.com/user-attachments/assets/c4d5f552-0ad4-4ec1-b0c1-6e4bcd31d104" />
+  <figcapition>Página Inicial 2</figcapition>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1892" height="841" alt="painel admin produtos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Painel Admin - Produtos</figcaption>
+  <img width="1906" height="607" alt="PaginaInicial3" src="https://github.com/user-attachments/assets/bf2322af-e41e-480b-8918-a651a2f6c064" />
+  <figcapition>Página Inicial 3</figcapition>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1886" height="761" alt="painel admin pedidos" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Painel Admin - Pedidos</figcaption>
+  <img width="1915" height="847" alt="CatalogoDeProdutos" src="https://github.com/user-attachments/assets/48c3b88c-7744-4996-97ed-6a0b40884746" />
+  <figcaption>Catálogo de Produtos</figcapition>
 </figure>
 <br> <br>
 
 <figure>
-  <img width="1872" height="688" alt="avaliações de produto" src="COLE_AQUI_O_LINK_DA_IMAGEM" />
-  <figcaption>Avaliações de produto</figcaption>
+  <img width="1916" height="826" alt="CarrinhoDeCompras" src="https://github.com/user-attachments/assets/27a668f8-a915-4a8e-8cae-7f98157c52dc" />
+  <figcapition>Carrinho de Compras</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1912" height="847" alt="FinalizacaoDeCompra" src="https://github.com/user-attachments/assets/fbe0809c-aba6-4cc5-a8d7-259c66257c86" />
+  <figcapition>Finalização de Compra</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1397" height="842" alt="HistoricoDePedidos" src="https://github.com/user-attachments/assets/501c551f-c162-4e50-a021-d540a32ad98c" />
+  <figcapition>Histórico de Pedidos</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="851" alt="PainelAdm_VisaoGeral" src="https://github.com/user-attachments/assets/99b67c73-5924-465a-bdd6-e96045a4c332" />
+  <figcapition>Painel Adm Visão Geral</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1912" height="867" alt="CadastroProduto" src="https://github.com/user-attachments/assets/e675b29a-bc34-4236-b04c-c1d9d75f8f5b" />
+  <figcapition>Cadastro de Produto</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="861" alt="PesquisaProduto" src="https://github.com/user-attachments/assets/f8e1af39-99da-4de9-a267-dfce39966459" />
+  <figcapition>Pesquisa de Produto</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1916" height="861" alt="CadastroCategoria" src="https://github.com/user-attachments/assets/200419bd-0eaf-4b3f-bb4a-016547ff8e29" />
+  <figcapition>Cadastro de Categoria</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="866" alt="PesquisaCategoria" src="https://github.com/user-attachments/assets/b529994e-6cd8-4f4e-88bf-5b1ffee6804b" />
+  <figcapition>Pesquisa de Categoria</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="862" alt="CadastroCupom" src="https://github.com/user-attachments/assets/78bfbf0a-5abb-4d0d-9377-026518aab6f5" />
+  <figcapition>Cadastro de Cupom</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1907" height="857" alt="GestãoDePedidos" src="https://github.com/user-attachments/assets/0b439058-f15f-41d5-8a88-ccd299b628cd" />
+  <figcapition>Gestão de Pedidos</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="862" alt="GestãoDePedidos1" src="https://github.com/user-attachments/assets/0342ce46-5cef-4b6b-9931-c30fdaf72cae" />
+  <figcapition>Gestão de Pedidos 1</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="862" alt="GestãoUsuários" src="https://github.com/user-attachments/assets/4fdddd62-27c0-47c1-b32c-5ac068590eca" />
+  <figcapition>Gestão de Usuários</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1917" height="851" alt="GestãoUsuários1" src="https://github.com/user-attachments/assets/90fa9bb1-6206-4e9d-86f5-e70692c1c848" />
+  <figcapition>Gestão de Usuários 1</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1901" height="857" alt="GestãoUsuários2" src="https://github.com/user-attachments/assets/cd69f043-7af8-458b-8596-50bdc37bc83f" />
+  <figcapition>Gestão de Usuários 2</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1731" height="840" alt="GestãoDePedidos_usuario" src="https://github.com/user-attachments/assets/ed3be4cc-1d72-46d4-8018-099aa66c819a" />
+  <figcapition>Gestão de Pedidos User</figcapition>
+</figure>
+<br> <br>
+
+<figure>
+  <img width="1357" height="857" alt="EdiçãoPerfil_usuarios" src="https://github.com/user-attachments/assets/cfe3f4f1-00d6-45ee-b641-d74edd2b9b39" />
+  <figcapition>Edição de Usuários User</figcapition>
 </figure>
 <br> <br>
 
